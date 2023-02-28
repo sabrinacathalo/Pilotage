@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+
+  db_pilotage:
+    image: mariadb:latest
+    container_name: db_pilotage
+    restart: always
+    volumes:
+      - data:/var/lib/mysql
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ${sqlPassword}
+      MYSQL_DATABASE: pilotage
+      MYSQL_USER: ${sqlUser}
+      MYSQL_PASSWORD: ${sqlPassword}
+    ports:
+      - "33315:3306"
+    networks:
+      - python-db
+      - phpmyadmin-db
+
+  phpmyadmin_pilotage:
+    depends_on:
+      - db_pilotage
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin_pilotage
+    restart: always
+    environment:
+      PMA_HOST: db_pilotage
+      MYSQL_ROOT_PASSWORD: ${sqlPassword}
+    ports:
+      - "8083:80"
+    networks:
+      - phpmyadmin-db
+
+volumes:
+  data:
+
+networks:
+  python-db:
+    driver: bridge
+  phpmyadmin-db:
+    driver: bridge
