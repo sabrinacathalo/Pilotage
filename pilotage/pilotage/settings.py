@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles'
 ]
 
 MIDDLEWARE = [
@@ -75,19 +75,28 @@ WSGI_APPLICATION = 'pilotage.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
-    'default': {
+
+DATABASES_DICT = {
+    "dev": {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': 'pilotage',
         'USER': 'root',
-        'PASSWORD': "azerty",
+        'PASSWORD': 'azerty',
         'HOST': '127.0.0.1',   # Or an IP Address that your DB is hosted on
         'PORT': '33315',
+    },
+    "docker": {
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'pilotage',
+        'USER': 'root',
+        'PASSWORD': 'azerty',
+        'HOST': 'db_pilotage',   # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
     }
+}
+
+DATABASES = {
+    'default': DATABASES_DICT[os.environ['APP_ENV']]
 }
 
 
@@ -125,7 +134,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+# STATIC_URL = 'static/'
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static/"),
+)
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

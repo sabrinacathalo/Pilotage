@@ -1,66 +1,345 @@
-<!DOCTYPE html>
-<html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!doctype html>
+<html class="no-js" lang="fr">
 
+{% load static %}
 
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" /> 
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <!-- others css -->
+    <link rel="stylesheet" href="{% static 'css/typography.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <!-- modernizr css -->
+</head>
 
-    </head>   
+<body>
+    <!-- page container area start -->
+        <!-- main content area start -->
+        <div class="main-content">
+            <!-- header area start -->
+            <div class="header-area">
+                <div class="row align-items-center">
+                    <h4 class="page-title pull-left">Dashboard</h4>
+                </div>
+            </div>
+            <!-- header area end -->
+            <div class="main-content-inner">
+                <!-- sales report area start -->
+                <div class="sales-report-area mt-5 mb-5">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="single-report mb-xs-30">
+                                <div class="s-report-inner pr--20 pt--30 mb-3">
+                                    <div class="s-report-title d-flex justify-content-between">
+                                        <h4 class="header-title mb-0">Température</h4>
+                                    </div>
+                                    <div class="d-flex justify-content-between pb-2">
+                                        <h2>{{lastData.temperature}}</h2>
+                                    </div>
+                                </div>
+                                <canvas id="coin_sales1" height="100"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="single-report mb-xs-30">
+                                <div class="s-report-inner pr--20 pt--30 mb-3">
+                                    <div class="s-report-title d-flex justify-content-between">
+                                        <h4 class="header-title mb-0">Lumière</h4>
+                                    </div>
+                                    <div class="d-flex justify-content-between pb-2">
+                                        <h2>{{lastData.lumiere}}</h2>
+                                    </div>
+                                </div>
+                                <canvas id="coin_sales2" height="100"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="single-report">
+                                <div class="s-report-inner pr--20 pt--30 mb-3">
+                                    <div class="s-report-title d-flex justify-content-between">
+                                        <h4 class="header-title mb-0">Humidité</h4>
+                                    </div>
+                                    <div class="d-flex justify-content-between pb-2">
+                                        <h2>{{lastData.humidite}}</h2>
+                                    </div>
+                                </div>
+                                <canvas id="coin_sales3" height="100"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- sales report area end -->
 
-    <body>
-        <div style="margin:10px">
+                <!-- overview area start -->
+                <div class="row">
+                    <div class="col-xl-9 col-lg-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="header-title mb-0">Overview</h4>
+                                </div>
+                                <div id="verview-shart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- overview area end -->
 
-    <!-- Title -->
-    <h1 style="text-align:center">Dashboard</h1>
+                <!-- row area start-->
+            </div>
+        </div>
+        <!-- main content area end -->
+   
+    <!-- jquery latest version -->
+    <script src="{% static 'js/vendor/jquery-2.2.4.min.js' %}"></script>
 
-    <!-- Other Display -->
+    <!-- start chart js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <!-- start zingchart js -->
+    <script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+    <script>
+    zingchart.MODULESDIR = "https://cdn.zingchart.com/modules/";
+    ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "ee6b7db5b51705a13dc2339db3edaf6d"];
+    </script>
+    <!-- all line chart activation -->
+    <script >
+        /*--------------  coin_sales1 start ------------*/
+if ($('#coin_sales1').length) {
+    var ctx = document.getElementById("coin_sales1").getContext('2d');
+    var toto  = {{ lastData.humidite }}
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'line',
+        // The data for our dataset
+        data: {
+            labels: {{date_times}},
+            datasets: [{
+                label: "Sales",
+                backgroundColor: "rgba(117, 19, 246, 0.1)",
+                borderColor: '#0b76b6',
+                data: {{temperatures}},
+            }]
+        },
+        // Configuration options go here
+        options: {
+            legend: {
+                display: false
+            },
+            animation: {
+                easing: "easeInOutBack"
+            },
+            scales: {
+                yAxes: [{
+                    display: !1,
+                    ticks: {
+                        fontColor: "rgba(0,0,0,0.5)",
+                        fontStyle: "bold",
+                        beginAtZero: !0,
+                        maxTicksLimit: 5,
+                        padding: 0
+                    },
+                    gridLines: {
+                        drawTicks: !1,
+                        display: !1
+                    }
+                }],
+                xAxes: [{
+                    display: !1,
+                    gridLines: {
+                        zeroLineColor: "transparent"
+                    },
+                    ticks: {
+                        padding: 0,
+                        fontColor: "rgba(0,0,0,0.5)",
+                        fontStyle: "bold"
+                    }
+                }]
+            }
+        }
+    });
+}
+/*--------------  coin_sales1 End ------------*/
 
-    <!-- Message -->
+/*--------------  coin_sales2 start ------------*/
+if ($('#coin_sales2').length) {
+    var ctx = document.getElementById("coin_sales2").getContext('2d');
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'line',
+        // The data for our dataset
+        data: {
+            labels: ["January", "February", "March", "April", "May", "June", "July", "January", "February", "March", "April", "May"],
+            datasets: [{
+                label: "Sales",
+                backgroundColor: "rgba(240, 180, 26, 0.1)",
+                borderColor: '#F0B41A',
+                data: [18, 41, 86, 49, 20, 65, 64, 50, 49, 30, 45, 25],
+            }]
+        },
+        // Configuration options go here
+        options: {
+            legend: {
+                display: false
+            },
+            animation: {
+                easing: "easeInOutBack"
+            },
+            scales: {
+                yAxes: [{
+                    display: !1,
+                    ticks: {
+                        fontColor: "rgba(0,0,0,0.5)",
+                        fontStyle: "bold",
+                        beginAtZero: !0,
+                        maxTicksLimit: 5,
+                        padding: 0
+                    },
+                    gridLines: {
+                        drawTicks: !1,
+                        display: !1
+                    }
+                }],
+                xAxes: [{
+                    display: !1,
+                    gridLines: {
+                        zeroLineColor: "transparent"
+                    },
+                    ticks: {
+                        padding: 0,
+                        fontColor: "rgba(0,0,0,0.5)",
+                        fontStyle: "bold"
+                    }
+                }]
+            }
+        }
+    });
+}
+/*--------------  coin_sales2 End ------------*/
 
-    <!-- Table -->
-    <div class="row" style="text-align:center">
-        <table>
-            <tr>
-                <th>dateTime</th>
-                <th>temperature</th>
-                <th>humidite</th>
-                <th>lumiere</th>
-                <th>distance obstacle</th>
-                <th>altitude</th>
-            </tr>
-            {% for data in datas %}
-                <tr>
-                    <td>{{ data.date_time }}</td>
-                    <td>{{ data.temperature }}</td>
-                    <td>{{ data.humidite }}</td>
-                    <td>{{ data.lumiere }}</td>
-                    <td>{{ data.distance_obstacle }}</td>
-                    <td>{{ data.distance_altitude }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
+/*--------------  coin_sales3 start ------------*/
+if ($('#coin_sales3').length) {
+    var ctx = document.getElementById("coin_sales3").getContext('2d');
+    var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'line',
+        // The data for our dataset
+        data: {
+            labels: ["January", "February", "March", "April", "May", "June", "July", "January", "February", "March", "April", "May"],
+            datasets: [{
+                label: "Sales",
+                backgroundColor: "rgba(247, 163, 58, 0.1)",
+                borderColor: '#fd9d24',
+                fill: true,
+                data: [18, 41, 50, 49, 20, 65, 50, 86, 20, 30, 45, 25],
+            }]
+        },
+        // Configuration options go here
+        options: {
+            legend: {
+                display: false
+            },
+            animation: {
+                easing: "easeInOutBack"
+            },
+            scales: {
+                yAxes: [{
+                    display: !1,
+                    ticks: {
+                        fontColor: "rgba(0,0,0,0.5)",
+                        fontStyle: "bold",
+                        beginAtZero: !0,
+                        maxTicksLimit: 5,
+                        padding: 0
+                    },
+                    gridLines: {
+                        drawTicks: !1,
+                        display: !1
+                    }
+                }],
+                xAxes: [{
+                    display: !1,
+                    gridLines: {
+                        zeroLineColor: "transparent"
+                    },
+                    ticks: {
+                        padding: 0,
+                        fontColor: "rgba(0,0,0,0.5)",
+                        fontStyle: "bold"
+                    }
+                }]
+            }
+        }
+    });
+}
 
-    <!-- Other Action -->
+/*--------------  coin_sales3 End ------------*/
 
-</div>
+/*--------------  overview-chart start ------------*/
+if ($('#verview-shart').length) {
+    var myConfig = {
+        "type": "line",
+
+        "scale-x": { //X-Axis
+            "labels": ["0", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100"],
+            "label": {
+                "font-size": 14,
+                "offset-x": 0,
+            },
+            "item": { //Scale Items (scale values or labels)
+                "font-size": 10,
+            },
+            "guide": { //Guides
+                "visible": false,
+                "line-style": "solid", //"solid", "dotted", "dashed", "dashdot"
+                "alpha": 1
+            }
+        },
+        "plot": { "aspect": "spline" },
+        "series": [{
+                "values": [20, 25, 30, 35, 45, 40, 40, 35, 25, 17, 40, 50],
+                "line-color": "#F0B41A",
+                /* "dotted" | "dashed" */
+                "line-width": 5 /* in pixels */ ,
+                "marker": { /* Marker object */
+                    "background-color": "#D79D3B",
+                    /* hexadecimal or RGB value */
+                    "size": 5,
+                    /* in pixels */
+                    "border-color": "#D79D3B",
+                    /* hexadecimal or RBG value */
+                }
+            },
+            {
+                "values": [40, 45, 30, 20, 30, 35, 45, 55, 40, 30, 55, 30],
+                "line-color": "#0884D9",
+                /* "dotted" | "dashed" */
+                "line-width": 5 /* in pixels */ ,
+                "marker": { /* Marker object */
+                    "background-color": "#067dce",
+                    /* hexadecimal or RGB value */
+                    "size": 5,
+                    /* in pixels */
+                    "border-color": "#067dce",
+                    /* hexadecimal or RBG value */
+                }
+            }
+        ]
+    };
+
+    zingchart.render({
+        id: 'verview-shart',
+        data: myConfig,
+        height: "100%",
+        width: "100%"
+    });
+}
+
+/*-------------- 11 line chart amchart end ------------*/
+    </script>
 </body>
-
-<footer>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-</footer>
-
-
 
 </html>

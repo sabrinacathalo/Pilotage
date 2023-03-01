@@ -2,6 +2,23 @@ version: '3'
 
 services:
 
+  django_pilotage:
+    depends_on:
+      - db_pilotage
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django_pilotage
+    restart: always
+    environment:
+      APP_PATH: /usr/src/app/
+      SQL_PASSWORD: ${sqlPassword}
+      APP_ENV: docker
+    ports:
+      - 58015:8000
+    networks:
+      - python-db
+
   db_pilotage:
     image: mariadb:latest
     container_name: db_pilotage

@@ -1,0 +1,76 @@
+/*------------------------- 1. Core Css -------------------*/
+
+.main-content {
+    width: 100%;
+    background: #F3F8FB;
+}
+
+.main-content-inner {
+    padding: 0 30px 50px;
+}
+
+/*------------------------- END Core Css -------------------*/
+
+
+/*-------------------- 2.2 Header Area -------------------*/
+
+.header-area {
+    padding: 15px 30px;
+    background: #fff;
+    border-bottom: 1px solid #d8e3e7;
+}
+
+
+/*-------------------- 2.4 Fact Area ------------------- */
+
+.single-report {
+    background: #fff;
+    overflow: hidden;
+    position: relative;
+}
+
+.s-report-inner {
+    padding-left: 10px;
+}
+
+.s-report-title {
+    margin-bottom: 25px;
+}
+
+.header-title {
+    font-family: 'Lato', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: #333;
+    text-transform: capitalize;
+    margin-bottom: 17px;
+}
+
+.single-report h2 {
+    font-size: 26px;
+    color: #565656;
+    font-weight: 500;
+    letter-spacing: 0;
+}
+
+
+.highcharts-exporting-group {
+    display: none;
+}
+
+/*-------------------- END Fact Area ------------------- */
+
+
+/*-------------------- 2.5 Overview ------------------- */
+
+#verview-shart {
+    height: 400px;
+}
+
+#verview-shart-license-text,
+#coin_distribution-license-text {
+    display: none;
+}
+
+/*-------------------- END Overview ------------------- */

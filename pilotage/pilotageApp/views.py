@@ -33,5 +33,13 @@ def synchroData(request):
 def dashboard(request):
 
     context = {}
-    context["datas"] = DataPilotage.objects.all()
+
+    lastData = DataPilotage.objects.all().order_by('-date_time').first()
+    datas = DataPilotage.objects.all().order_by('date_time')
+    context["datas"] = datas
+    context["lastData"] = lastData
+    context['temperatures'] = [data.temperature for data in datas]
+    context['date_times'] = [int(data.date_time.timestamp()) for data in datas]
+    
+
     return HttpResponse(render(request, "pilotageApp/dashboard.html", context))
