@@ -23,8 +23,7 @@ def synchroData(request):
             temperature =  data["temperature"],
             humidite =  data["humidite"],
             date_time = datetime.datetime.fromtimestamp(int(data["date_time"])),
-            distance_obstacle =  data["distance_obstacle"],
-            distance_altitude =  data["distance_altitude"],
+            altitude =  data["altitude"],
             lumiere =  data["lumiere"],
         )
         dataDB.save()
@@ -39,6 +38,9 @@ def dashboard(request):
     context["datas"] = datas
     context["lastData"] = lastData
     context['temperatures'] = [data.temperature for data in datas]
+    context['lumiere'] = [data.lumiere for data in datas]
+    context['humidite'] = [data.humidite for data in datas]
+    context['altitude'] = [data.altitude for data in datas]
     context['date_times'] = [int(data.date_time.timestamp()) for data in datas]
     
 

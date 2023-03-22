@@ -5,8 +5,7 @@ class DataPilotage(models.Model):
     temperature = models.FloatField()
     date_time = models.DateTimeField('date published')
     lumiere=models.FloatField(default=None, null = True)
-    distance_obstacle=models.FloatField()
-    distance_altitude=models.FloatField()
+    altitude=models.FloatField()
     humidite=models.FloatField()
 
 
