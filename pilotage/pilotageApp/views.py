@@ -22,7 +22,7 @@ def synchroData(request):
         dataDB = DataPilotage(
             temperature =  data["temperature"],
             humidite =  data["humidite"],
-            date_time = datetime.datetime.fromtimestamp(int(data["date_time"])),
+            date_time = datetime.datetime.now(),
             altitude =  data["altitude"],
             lumiere =  data["lumiere"],
         )
