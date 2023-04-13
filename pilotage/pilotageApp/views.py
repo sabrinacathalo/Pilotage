@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import datetime
 
-from pilotageApp.models import DataPilotage
+from pilotageApp.models import DataPilotage, LastAction
 
 def index(request):
     return HttpResponse("HELLO !")
@@ -28,6 +28,29 @@ def synchroData(request):
         )
         dataDB.save()
     return JsonResponse({"message": "data posted"})
+
+@csrf_exempt
+def action(request):
+
+    if request.method == 'POST':
+        dataJson = request.body.decode('utf-8')
+        data = json.loads(dataJson)
+
+        if data["value"] not in ['UP', 'DOWN', 'LEFT', 'RIGHT', 'AUTO']:
+            return JsonResponse({"message": "error"})
+
+        action = LastAction(
+            value = data["value"],
+            date_time = datetime.datetime.now()
+        )
+        action.save()
+    return JsonResponse({"message": "action posted"})
+
+def getLastAction(request):
+
+    action = LastAction.objects.last()
+
+    return JsonResponse({"value": action.value})
 
 def dashboard(request):
 
