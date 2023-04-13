@@ -36,9 +36,6 @@ def action(request):
         dataJson = request.body.decode('utf-8')
         data = json.loads(dataJson)
 
-        if data["value"] not in ['UP', 'DOWN', 'LEFT', 'RIGHT', 'AUTO']:
-            return JsonResponse({"message": "error"})
-
         action = LastAction(
             value = data["value"],
             date_time = datetime.datetime.now()
