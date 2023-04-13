@@ -46,6 +46,17 @@ def action(request):
         action.save()
     return JsonResponse({"message": "action posted"})
 
+@csrf_exempt
+def resetData(request):
+
+    if request.method == 'POST':
+
+        datas = DataPilotage.objects.all()
+        for data in datas:
+            data.delete()
+
+    return JsonResponse({"message": "removed"})
+
 def getLastAction(request):
 
     action = LastAction.objects.last()
